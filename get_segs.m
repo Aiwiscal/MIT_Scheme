@@ -1,0 +1,44 @@
+clear;clc;
+DS1=[101,106,108,109,112,114,115,116,118,119,122,124,201,203,205,207,208,209,215,220,223,230];
+DS2 = [100,103,105,111,113,117,121,123,200,202,210,212,213,214,219,221,222,228,231,232,233,234];
+seg_length = 1800;  % 指定切片长度;
+data_path =  'E:\MIT_Scheme\MIT-BIH\'; % 数据库存放路径;
+save_path = 'E:\MIT_Scheme\Data_mat\'; % 生成mat文件存放路径;
+tic;
+res = check_nums_overlaps( DS1, seg_length, data_path); % 计算训练集DS1各类切片的数目以及用于平衡的重叠的长度;
+%%  截取训练集切片
+fprintf('> Get Training data(DS1)...\n'); 
+N_SEG = get_category_segs( res{1}.class, res{1}.overlap, DS1, seg_length, data_path );
+save(strcat(save_path,'N_SEG_train.mat'),'N_SEG'); fprintf('N_SEG_train: %d\n',size(N_SEG,1));
+clear N_SEG;
+SVEB_SEG = get_category_segs( res{2}.class, res{2}.overlap, DS1, seg_length, data_path);
+save(strcat(save_path,'SVEB_SEG_train.mat'),'SVEB_SEG'); fprintf('SVEB_SEG_train: %d\n',size(SVEB_SEG,1));
+clear SVEB_SEG;
+VEB_SEG = get_category_segs( res{3}.class, res{3}.overlap, DS1, seg_length, data_path);
+save(strcat(save_path,'VEB_SEG_train.mat'),'VEB_SEG'); fprintf('VEB_SEG_train: %d\n',size(VEB_SEG,1));
+clear VEB_SEG;
+F_SEG = get_category_segs( res{4}.class, res{4}.overlap, DS1, seg_length, data_path);
+save(strcat(save_path,'F_SEG_train.mat'),'F_SEG'); fprintf('F_SEG_train: %d\n',size(F_SEG,1));
+clear F_SEG;
+Q_SEG = get_category_segs( res{5}.class, res{5}.overlap-1, DS1, seg_length, data_path);
+save(strcat(save_path,'Q_SEG_train.mat'),'Q_SEG'); fprintf('Q_SEG_train: %d\n',size(Q_SEG,1));
+clear Q_SEG;
+%% 截取测试集片段；
+fprintf('> Get Testing data(DS2)...\n'); 
+N_SEG = get_category_segs( res{1}.class, 0, DS2, seg_length, data_path );
+save(strcat(save_path,'N_SEG_test.mat'),'N_SEG'); fprintf('N_SEG_test: %d\n',size(N_SEG,1));
+clear N_SEG;
+SVEB_SEG = get_category_segs( res{2}.class, 0, DS2, seg_length, data_path);
+save(strcat(save_path,'SVEB_SEG_test.mat'),'SVEB_SEG');fprintf('SVEB_SEG_test: %d\n',size(SVEB_SEG,1));
+clear SVEB_SEG;
+VEB_SEG = get_category_segs( res{3}.class, 0, DS2, seg_length, data_path);
+save(strcat(save_path,'VEB_SEG_test.mat'),'VEB_SEG'); fprintf('VEB_SEG_test: %d\n',size(VEB_SEG,1));
+clear VEB_SEG;
+F_SEG = get_category_segs( res{4}.class, 0, DS2, seg_length, data_path);
+save(strcat(save_path,'F_SEG_test.mat'),'F_SEG'); fprintf('F_SEG_test: %d\n',size(F_SEG,1));
+clear F_SEG;
+Q_SEG = get_category_segs( res{5}.class, 0, DS2, seg_length, data_path);
+save(strcat(save_path,'Q_SEG_test.mat'),'Q_SEG'); fprintf('Q_SEG_test: %d\n',size(Q_SEG,1));
+clear Q_SEG;
+
+toc;
